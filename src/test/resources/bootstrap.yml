@@ -1,0 +1,8 @@
+embedded:
+    kafka:
+#        enabled: true
+        dockerImageVersion: 7.0.1
+        topicsToCreate: test
+        schema-registry:
+            enabled: false
+            dockerImage: confluentinc/cp-schema-registry:7.0.1
