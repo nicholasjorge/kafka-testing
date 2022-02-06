@@ -1,5 +1,6 @@
-package dev.georgetech.config;
+package dev.georgetech.config.json;
 
+import dev.georgetech.kafka.json.model.Dance;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -13,32 +14,34 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 @Configuration
-public class KafkaConsumerConfig {
+public class KafkaJsonConsumerConfig {
 
   @Autowired
   private KafkaProperties kafkaProperties;
 
-  private Map<String, Object> consumerConfigs() {
+  private Map<String, Object> jsonConsumerConfigs() {
     HashMap<String, Object> configs = new HashMap<>();
     configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-    configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     return configs;
   }
 
   @Bean
-  public ConsumerFactory<String, String> consumerFactory() {
-    return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+  public ConsumerFactory<String, Dance> jsonConsumerFactory() {
+    return new DefaultKafkaConsumerFactory<>(
+        jsonConsumerConfigs(),
+        new StringDeserializer(),
+        new JsonDeserializer<>(Dance.class)
+    );
   }
 
   @Bean
-  public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>>
-  kafkaListenerContainerFactory(ConsumerFactory<String, String> consumerFactory) {
-    ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
-    factory.setConsumerFactory(consumerFactory);
+  public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Dance>>
+  kafkaJsonListenerContainerFactory(ConsumerFactory<String, Dance> jsonConsumerFactory) {
+    ConcurrentKafkaListenerContainerFactory<String, Dance> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    factory.setConsumerFactory(jsonConsumerFactory);
     return factory;
   }
-
 }

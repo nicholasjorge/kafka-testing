@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### AVRO ###
+src/main/java/dev/georgetech/avro

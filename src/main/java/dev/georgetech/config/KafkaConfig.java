@@ -11,8 +11,20 @@ import org.springframework.kafka.config.TopicBuilder;
 public class KafkaConfig {
 
   @Bean
-  public NewTopic topic() {
-    return TopicBuilder.name("test")
+  public NewTopic topicString() {
+    return TopicBuilder.name("test-string")
+        .build();
+  }
+
+  @Bean
+  public NewTopic topicAvro() {
+    return TopicBuilder.name("test-avro")
+        .build();
+  }
+
+  @Bean
+  public NewTopic topicJson() {
+    return TopicBuilder.name("test-json")
         .build();
   }
 }

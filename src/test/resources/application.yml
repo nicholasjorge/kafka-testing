@@ -2,4 +2,4 @@ spring:
   kafka:
     bootstrap-servers: ${embedded.kafka.brokerList}
     properties:
-      schema.registry.url: ${embedded.kafka.schema-registry.host}:${embedded.kafka.schema-registry.port}
+      schema.registry.url: "http://${embedded.kafka.schema-registry.host}:${embedded.kafka.schema-registry.port}"

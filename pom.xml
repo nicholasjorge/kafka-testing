@@ -19,7 +19,18 @@
 
   <properties>
     <java.version>17</java.version>
+    <avro.version>1.11.0</avro.version>
+    <confluent.version>7.0.1</confluent.version>
+    <spring-cloud-starter-bootstrap.version>3.1.0</spring-cloud-starter-bootstrap.version>
+    <playtika-testcontainers.version>2.0.20</playtika-testcontainers.version>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>confluent</id>
+      <url>https://packages.confluent.io/maven/</url>
+    </repository>
+  </repositories>
 
   <dependencies>
 
@@ -33,16 +44,31 @@
       <artifactId>spring-kafka</artifactId>
     </dependency>
 
+    <!--avro-->
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <version>${avro.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.confluent</groupId>
+      <artifactId>kafka-avro-serializer</artifactId>
+      <version>${confluent.version}</version>
+    </dependency>
+
+    <!--    testing-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap -->
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-bootstrap</artifactId>
-      <version>3.1.0</version>
+      <version>${spring-cloud-starter-bootstrap.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -50,10 +76,11 @@
     <dependency>
       <groupId>com.playtika.testcontainers</groupId>
       <artifactId>embedded-kafka</artifactId>
-      <version>2.0.20</version>
+      <version>${playtika-testcontainers.version}</version>
       <scope>test</scope>
     </dependency>
 
+    <!--optional-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-configuration-processor</artifactId>
@@ -66,16 +93,11 @@
       <optional>true</optional>
     </dependency>
 
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
     <plugins>
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -88,6 +110,7 @@
           </excludes>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -101,6 +124,26 @@
           </execution>
         </executions>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-maven-plugin</artifactId>
+        <version>${avro.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>schema</goal>
+            </goals>
+            <configuration>
+              <sourceDirectory>${project.basedir}/src/main/resources/avro/</sourceDirectory>
+              <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+              <stringType>String</stringType>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

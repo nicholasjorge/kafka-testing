@@ -1,4 +1,4 @@
-package dev.georgetech.config;
+package dev.georgetech.config.string;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,12 +13,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
-public class KafkaProducerConfig {
+public class KafkaStringProducerConfig {
 
   @Autowired
   private KafkaProperties kafkaProperties;
 
-  private Map<String, Object> producerConfigs() {
+  private Map<String, Object> stringProducerConfigs() {
     HashMap<String, Object> configs = new HashMap<>();
     configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
     configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -27,14 +27,14 @@ public class KafkaProducerConfig {
   }
 
   @Bean
-  public ProducerFactory<String, String> producerFactory() {
-    return new DefaultKafkaProducerFactory<>(producerConfigs());
+  public ProducerFactory<String, String> stringProducerFactory() {
+    return new DefaultKafkaProducerFactory<>(stringProducerConfigs());
   }
 
   @Bean
-  public KafkaTemplate<String, String> kafkaTemplate(
-      ProducerFactory<String, String> producerFactory) {
-    return new KafkaTemplate<>(producerFactory);
+  public KafkaTemplate<String, String> stringKafkaTemplate(
+      ProducerFactory<String, String> stringProducerFactory) {
+    return new KafkaTemplate<>(stringProducerFactory);
   }
 
 }

@@ -1,4 +1,4 @@
-package dev.georgetech.kafka;
+package dev.georgetech.kafka.string;
 
 import java.util.concurrent.CountDownLatch;
 import lombok.RequiredArgsConstructor;
@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KafkaConsumer {
+public class KafkaStringConsumer {
 
   private final CountDownLatch latch = new CountDownLatch(1);
 
   @KafkaListener(
-      topics = "test",
-      groupId = "test"
+      topics = "test-string",
+      groupId = "test-string",
+      containerFactory = "kafkaStringListenerContainerFactory"
   )
   public void consume(String data) {
     log.info("Received data: {}", data);

@@ -1,0 +1,9 @@
+{
+  "namespace": "dev.georgetech.avro",
+  "type": "record",
+  "name": "Dance",
+  "fields": [
+    {"name": "id", "type": "int"},
+    {"name": "name",  "type": "string"}
+  ]
+}
